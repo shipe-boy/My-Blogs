@@ -132,6 +132,11 @@ export default {
                           this.$store.commit('userName', res.data.result.username)
                           this.$store.commit('userFace', res.data.result.userface)
                           this.$emit('on-close')
+                          this.ruleForm2.name = ""
+                          this.ruleForm2.pass = ""
+                          this.ruleForm2.checkPass = ""
+                          this.ruleForm2.email = ""
+                          this.ruleForm2.phone = ""
                         }else{
                           this.msg = res.data.msg
                           this.open4()

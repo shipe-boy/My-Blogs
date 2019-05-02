@@ -77,28 +77,6 @@ router.post('/register', async function(req, res, next) {
         })
     }).then(async data => { //成功
         if (data) { //注册成功
-            //设置cookie
-            /* res.cookie("username", username, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            })
-            res.cookie("userface", data.avatar, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            })
-            res.cookie("userId", data._id, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            }) */
             req.session.userInfo = data;
             await res.json({
                 status: 0,
@@ -147,28 +125,7 @@ router.post('/login', async function(req, res, next) {
         })
     }).then(async data => { //成功
         if (data) { //登陆成功
-            //设置cookie
-            /* res.cookie("username", username, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            })
-            res.cookie("userface", data[0].avatar, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            })
-            res.cookie("userId", data[0]._id, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            }) */
+            //设置session
             req.session.userInfo = data[0];
             await res.json({
                 status: 0,
@@ -206,17 +163,9 @@ router.post('/login', async function(req, res, next) {
 
 //退出登录
 router.get('/loginout', async(req, res, next) => {
-    /* res.cookie("username", null, {
-        maxAge: 0
-    });
-    res.cookie("userface", null, {
-        maxAge: 0
-    });
-    res.cookie("userId", null, {
-        maxAge: 0
-    }); */
+
     //清除session
-    req.session.distory();
+    req.session.destroy();
     res.json({
         status: 0,
         msg: '',
@@ -268,7 +217,6 @@ router.get('/allusers', async function(req, res, next) {
 })
 
 
-
 //头像上传
 router.post('/update', async(req, res, next) => {
     // console.log("文件名" + req.file)
@@ -276,7 +224,8 @@ router.post('/update', async(req, res, next) => {
 
     let data = {}
 
-    await User.updateOne({ _id: req.session.userInfo._id }, { $set: { avatar: "/images/" + filename } }, (err, res) => {
+    // 更新数据库
+    await User.updateOne({ _id: req.session.userInfo._id }, { $set: { avatar: "/images/avatar/" + filename } }, (err, res) => {
         if (err) {
             data = {
                 status: 1,
@@ -291,31 +240,9 @@ router.post('/update', async(req, res, next) => {
     })
     await User.findOne({ _id: req.session.userInfo._id })
         .then(response => {
-            // data.avatar = response.avatar
-            //设置session
-            // req.session.userInfo = response;
-            /* res.cookie("userface", data.avatar, {
-                    //配置cookie的属性
-                    path: "/",
-                    maxAge: 1000 * 60 * 60 * 24,
-                    httpOnly: true, //不让客户端控制这条cookie
-                    overwrite: false
-                })
-                //设置cookie
-            res.cookie("username", response.username, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            })
-            res.cookie("userId", response._id, {
-                //配置cookie的属性
-                path: "/",
-                maxAge: 1000 * 60 * 60 * 24,
-                httpOnly: true, //不让客户端控制这条cookie
-                overwrite: false
-            }) */
+            data.avatar = response.avatar
+                //设置session
+            req.session.userInfo = response;
         }).catch(err => {
             console.log(err)
         })

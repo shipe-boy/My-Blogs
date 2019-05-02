@@ -39,7 +39,7 @@
               @close="handleClose">
               <el-menu-item index="1">
                 <span slot="title">
-                  <router-link :to="{name: 'index'}">首页</router-link>
+                  <router-link :to="{name: 'articleList'}">首页</router-link>
                 </span>
               </el-menu-item>
               <el-submenu index="2">
@@ -47,12 +47,12 @@
                   <span>文章</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item index="HTML5和CSS3"><router-link :to="{name: 'articleList'}">HTML5和CSS3</router-link></el-menu-item>
-                  <el-menu-item index="JavaScript"><router-link :to="{name: 'articleList'}">JavaScript</router-link></el-menu-item>
-                  <el-menu-item index="Vue"><router-link :to="{name: 'articleList'}">Vue</router-link></el-menu-item>
-                  <el-menu-item index="Node"><router-link :to="{name: 'articleList'}">Node</router-link></el-menu-item>
-                  <el-menu-item index="React"><router-link :to="{name: 'articleList'}">React</router-link></el-menu-item>
-                  <el-menu-item index="其他"><a href="/index">其他</a></el-menu-item>
+                  <el-menu-item index="HTML5和CSS3">HTML5和CSS3</el-menu-item>
+                  <el-menu-item index="JavaScript">JavaScript</el-menu-item>
+                  <el-menu-item index="Vue">Vue</el-menu-item>
+                  <el-menu-item index="Node">Node</el-menu-item>
+                  <el-menu-item index="React">React</el-menu-item>
+                  <el-menu-item index="其他">其他</el-menu-item>
                 </el-menu-item-group>
               </el-submenu>
               <el-menu-item index="3">
@@ -75,28 +75,32 @@
 
         <div class="user">
           <!-- 登陆注册按钮 -->
-          <a v-if="!isLogin" class="blog-user" href="javascript:;" @click="loging = true;isRegist = false">登陆/注册</a>
+          <a v-if="!username" class="blog-user" href="javascript:;" @click="loging = true;isRegist = false">登陆/注册</a>
           <!-- 登陆注册弹框 -->
           <el-dialog title="欢迎回来！" :visible.sync="loging" :modal-append-to-body="false">
             <login v-if="!isRegist" @on-close="closeDialog();" @on-change="toogle"></login>
             <register v-if="isRegist" @on-close="closeDialog()"></register>
           </el-dialog>
           <!-- 用户信息 -->
-          <div v-if="isLogin" class="blog-user">
-            <img :src='"http://localhost:3000"+ userface' :alt="username">
-            <span>{{ username }}</span>
-            <ul class="user-msg">
-              <li>
-                <router-link :to="{name: 'userinfo'}">个人资料</router-link>
-              </li>
-              <li>
-                <router-link :to="{name: 'user',query: {role}}">管理中心</router-link>
-              </li>
-              <li v-if="role > 900">
-                <router-link :to="{name: 'publish'}">文章发表</router-link>
-              </li>
-              <li @click="loginOut">退出登陆</li>
-            </ul>
+          <div v-if="username" class="blog-user">
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                <img :src='"http://localhost:3000"+ userface' :alt="username">
+                <span>{{ username }}</span>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>
+                  <router-link :to="{name: 'userinfo'}">个人资料</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <router-link :to="{name: 'user',query: {role}}">管理中心</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item>
+                  <router-link :to="{name: 'publish'}">文章发表</router-link>
+                </el-dropdown-item>
+                <el-dropdown-item command="loginOut" divided>退出登陆</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
         </div>
       </div>
@@ -119,8 +123,7 @@
         role: 1, //权限
         isOpen: false, //移动端
         loging: false, //登陆框
-        isRegist: false,
-        isLogin: false
+        isRegist: false
       }
     },
     computed: {
@@ -138,47 +141,25 @@
       getUserInfo() {
         this.$ajax.get("/users/checkLogin").then(res => {
           if (res.data.status == 0) { //用户登陆了
-            this.isLogin = true;
+
             this.$store.commit('userName', res.data.result.username)
             this.$store.commit('userFace', res.data.result.userface)
             this.role = res.data.result.role;
-            // console.log(res)
+            // console.log(this.role)
+            // console.log("http://localhost:3000"+ this.userface)
           }
         }).catch((err) => {
           console.log(err)
         })
       },
-      //退出登录
-      loginOut() {
-        this.$ajax.get("/users/loginout").then(res => {
-          //    console.log(res)
-          if (res.data.status === 0) {
-            // this.username = "";
-            // this.userface = "";
-            this.$store.commit('userName', "")
-            this.$store.commit('userFace', "")
-          }
-          this.isLogin = false;
-          this.$router.push('/index') //返回首页
-        }).catch(err => {
-          console.log(err)
-        })
-      },
       handleSelect(key, keyPath) {
-        this.isOpen = false;
+        this.isOpen = false; //移动端
         // console.log("/article/articles/" + key);
-        if (keyPath[0] === "2") {
-          this.$ajax.get("/article/articles/" + key).then(res => {
-            // console.log(res.data.result)
-            connect.$emit('type', res.data.result)
-          }).catch((err) => {
-            console.log(err)
-          })
-        } else if (key === "1") {
-          connect.$emit('all')
+        if (keyPath[0] === "2" || key === "1") {
+          key = key == "1" ? "all" : key;
+          this.$router.push('/index')
+          connect.$emit('type', key)
         }
-        
-
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
@@ -191,10 +172,24 @@
       },
       closeDialog() {
         this.loging = false;
-        this.isLogin = true;
       },
       toogle() {
         this.isRegist = !this.isRegist;
+      },
+      handleCommand(command) {
+        if (command) {
+          //退出登录
+          this.$ajax.get("/users/loginout").then(res => {
+            //    console.log(res)
+            if (res.data.status === 0) {
+              this.$store.commit('userName', "")
+              this.$store.commit('userFace', "")
+            }
+              this.$router.push('/index') //返回首页
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       }
     }
   }
@@ -256,32 +251,11 @@
     padding: 0 5px;
   }
 
-  .blog-user>img {
+  .blog-user img {
     border-radius: 50%;
     width: 40px;
     height: 40px;
     margin-right: 8px;
-  }
-
-  .blog-user .user-msg {
-    display: none;
-    position: absolute;
-    width: 100%;
-    line-height: 30px;
-    background-color: #fff;
-    text-align: center
-  }
-
-  .blog-user .user-msg li {
-    height: 30px;
-  }
-
-  .blog-user .user-msg li:hover {
-    background-color: #eee;
-  }
-
-  .blog-user:hover .user-msg {
-    display: block
   }
 
   .phone-menu {

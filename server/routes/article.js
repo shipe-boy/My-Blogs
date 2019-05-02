@@ -7,6 +7,7 @@ const User = require("../module/user")
 const Comment = require("../module/comment")
 const Types = require("../module/types")
 
+require('../utils/time')
 
 //文章发表页中，点击发表，处理接收的数据
 router.post('/publish', async(req, res, next) => {
@@ -16,6 +17,7 @@ router.post('/publish', async(req, res, next) => {
     data.author = req.session.userInfo._id;
     data.commentNum = 0;
     data.readNum = 0;
+    data.time = new Date().Format('yyyy-MM-dd hh:mm:ss');
 
     let article;
 
@@ -28,7 +30,13 @@ router.post('/publish', async(req, res, next) => {
             })
     }).then(() => {
         //更新用户文章计数
-        User.updateOne({ _id: data.author }, { $inc: { articleNum: 1 } }, err => {
+        User.updateOne({
+            _id: data.author
+        }, {
+            $inc: {
+                articleNum: 1
+            }
+        }, err => {
             if (err) return console.log(err)
         })
 
@@ -45,23 +53,25 @@ router.post('/publish', async(req, res, next) => {
     })
 
 
-
+    //根据类型添加对应的类型表
     let type = req.body.types;
-
     if (type.length === 0) {
         type.push("其他")
     }
-
     type.forEach(async item => {
         let have;
-        await Types.findOne({ type: item })
-            .then(res => { have = res; }).catch(err => {
+        await Types.findOne({
+                type: item
+            })
+            .then(res => {
+                have = res;
+            }).catch(err => {
                 console.log(err)
             })
 
         if (have) { //有
             // console.log("添加数据")
-            have.article.push(article)
+            have.article.unshift(article._id)
             have.save((err) => {
                 if (err) throw err;
             })
@@ -70,7 +80,7 @@ router.post('/publish', async(req, res, next) => {
             // console.log("创建集合")
             let obj = {
                 type: item,
-                article: [article]
+                article: [article._id]
             }
             new Types(obj)
                 .save((err, data) => {
@@ -84,62 +94,106 @@ router.post('/publish', async(req, res, next) => {
 })
 
 //文章列表
-router.post('/list', async(req, res, next) => {
-    // console.log(req.body.page)
-    let page = req.body.page || 1;
-    //文章数量
-    let maxNum = await Article.estimatedDocumentCount((err, data) => {
-        if (err) return err;
-        return data;
-    });
+router.get('/list/:type/:page', async(req, res, next) => {
+    let type = req.params.type || 'all';
+    let page = req.params.page || 1;
+    // console.log(type, page)
+    if (type == 'all') { //所有文章
+        //文章数量
+        let maxNum = await Article.estimatedDocumentCount((err, data) => {
+            if (err) return err;
+            return data;
+        });
 
+        let arrList = [];
+        //置顶搜索
+        let arr1 = await Article
+            .find({
+                isTop: true
+            })
+            .sort("-createTime")
+            .populate("author", "_id username avatar")
+            .then(data => {
+                arrList = [...data]
+            }, err => {
+                console.log(err)
+            })
+            //其他搜索
+        let arr2 = await Article
+            .find({
+                isTop: false
+            })
+            .sort("-createTime")
+            .populate("author", "_id username avatar")
+            .then(data => {
+                arrList = arrList.concat(data)
+            }, err => {
+                console.log(err)
+            })
+            // 返回数据    
+        let artList = [];
+        for (let i = (page - 1) * 5; i < page * 5; i++) {
+            if (i >= maxNum) {
+                break;
+            }
+            artList.push(arrList[i])
+        }
+        //返回数据
+        await res.json({
+            status: 0,
+            msg: '',
+            result: {
+                artList,
+                maxNum
+            }
+        })
+    } else { //相关类型的文章
 
-    /*  let artList = await Article
-         .find()
-         .sort("-createTime")
-         .skip((page - 1) * 5) //数据库里从第几条开始找
-         .limit(5)  //获取几条数据 */
-    /* .populate({    //连表查询
-        path : "author",
-        select : "_id username avatar"
-    }) */
-    /*  .populate("author", "_id username avatar") 
-     .then((data) => data , (err) => {
-         console.log("报错")
-     }); */
-    let arrList = [];
-    //置顶搜索
-    let arr1 = await Article
-        .find({ isTop: true })
-        .sort("-createTime")
-        .populate("author", "_id username avatar")
-        .then(data => {
-            arrList = [...data]
-        }, err => {
-            console.log(err)
+        await Types.findOne({
+            type
+        }, (err, data) => {
+            if (err) {
+                res.json({
+                    status: 0,
+                    msg: err.message,
+                    result: ''
+                })
+            }
+            if (!data) { //无数据
+                res.json({
+                    status: 0,
+                    msg: '无数据',
+                    result: ''
+                })
+                return;
+            }
+            let opts = [{
+                    path: 'article'
+                }] //链表查询时填充的地方
+                // console.log(data)
+            data.populate(opts, (err, doc) => {
+                if (err) {
+                    res.json({
+                        status: 0,
+                        msg: err.message,
+                        result: ''
+                    })
+                }
+                // console.log(doc)  //已经填充了的类型表
+                res.json({
+                    status: 0,
+                    msg: '',
+                    result: {
+                        artList: doc.article,
+                        maxNum: doc.length
+                    }
+                })
+            })
         })
-        //其他搜索
-    let arr2 = await Article
-        .find({ isTop: false })
-        .sort("-createTime")
-        .populate("author", "_id username avatar")
-        .then(data => {
-            arrList = arrList.concat(data)
-        }, err => {
-            console.log(err)
-        })
-        // 返回数据    
-    let artList = [];
-    for (let i = (page - 1) * 5; i < page * 5; i++) {
-        if (i >= maxNum) { break; }
-        artList.push(arrList[i])
     }
-    //渲染页面
-    await res.json({
-        artList,
-        maxNum
-    })
+
 })
+
 
 //文章详情页
 router.get('/details/:id', async(req, res, next) => {
@@ -151,16 +205,26 @@ router.get('/details/:id', async(req, res, next) => {
         .then(data => data, err => err);
 
     //更新文章阅读量计数
-    Article.updateOne({ _id: _id }, { $inc: { readNum: 1 } }, err => {
+    Article.updateOne({
+        _id: _id
+    }, {
+        $inc: {
+            readNum: 1
+        }
+    }, err => {
         if (err) return console.log(err)
     })
 
     //查找跟当前文章相关的所有评论
     let comment = await Comment
-        .find({ article: _id })
+        .find({
+            article: _id
+        })
         .sort("-createTime")
         .populate("author", "username avatar")
-        .then(data => data, err => { console.log("报错了") })
+        .then(data => data, err => {
+            console.log("报错了")
+        })
 
     //渲染页面
     await res.json({
@@ -174,7 +238,9 @@ router.get('/details/:id', async(req, res, next) => {
 router.get('/allarticle', async(req, res, next) => {
     const userId = req.session.userInfo._id;
 
-    const data = await Article.find({ author: userId })
+    const data = await Article.find({
+        author: userId
+    })
 
     res.json({
         data
@@ -187,49 +253,58 @@ router.get('/allarticle', async(req, res, next) => {
 router.get('/del/:id', async(req, res, next) => {
     //文章id
     const _id = req.params.id;
-
+    let type = []; //暂存文章类型
     let data = {
         state: 1,
         msg: "成功"
     }
 
     await Article.findById(_id)
-        .then(data => data.remove())
+        .then(data => {
+            type = data.types;
+            data.remove()
+        })
         .catch(err => {
             data = {
                 state: 0,
                 msg: err
             }
+
         })
 
+    //删除类型
+    type.forEach((item => {
+        Types.update({
+            type: item
+        }, {
+            $pull: { //删除数组某一项
+                'article': {
+                    _id
+                }
+            }
+        }).then(doc => {}).catch(err => {
+            data = {
+                state: 0,
+                msg: err
+            }
+        })
+    }))
     res.json(data)
 })
 
-//获取对应类型的文章
-router.get('/articles/:type', async(req, res, next) => {
-    //文章类型
-    const type = req.params.type;
+//文章里的图片上传,已经经过中间件处理了
+router.post('/img', async(req, res, next) => {
+    // console.log("文件名" + req.file.filename)
+    let filename = req.file.filename
 
-    await Types.find({ type })
-        .then(data => {
-            // console.log(data.article)
-            res.json({
-                status: 0,
-                msg: '',
-                result: data[0].article
-            })
-        })
-        .catch(err => {
-            // console.log(err)
-            res.json({
-                status: 0,
-                msg: 'err',
-                result: ''
-            })
-        })
-
-
-
+    res.json({
+        status: 0,
+        msg: '',
+        result: {
+            url: '/images/article/' + filename
+        }
+    })
 })
+
 
 module.exports = router;

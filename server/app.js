@@ -60,8 +60,11 @@ app.use(function(req, res, next) {
 //静态资源
 app.use(express.static('public'))
 
+//处理文件上传中间件
 const upload = require("./utils/upload")
+const article = require("./utils/artImg")
 app.use('/users/update', upload.single("file"))
+app.use('/article/img', article.single("img"))
 
 app.use('/', indexRouter);
 app.use('/users', Users);

@@ -3,21 +3,21 @@
     <article class="article-list">
         <section class="article-item">
             <aside class="title" style="line-height:1.5;">
-                <h4>{{ article.title }}</h4>
+                <h2>{{ article.title }}</h2>
                 <p class="fc-grey fs-14">
                     <small>
                         作者：<a href="javascript:void(0)" target="_blank" class="fc-link"> {{username}} </a>
                     </small>
-                    <small class="ml10">发表于 <label>{{ time }}</label> </small>
+                    <small class="ml10">发表于 <label>{{ article.time }}</label> </small>
                 </p>
             </aside>
             <div class="time mt10" style="padding-bottom:0;">
-                <span class="day">{{ day }}</span>
-                <span class="month fs-18">{{ mou }}<small class="fs-14">月</small></span>
-                <span class="year fs-18">{{ years }}</span>
+                <span class="day">{{ article.time ? article.time.slice(8,10) : '' }}</span>
+                <span class="month fs-18">{{ article.time ? article.time.slice(5,7) : ''  }}<small class="fs-14">月</small></span>
+                <span class="year fs-18">{{ article.time ? article.time.slice(0,4) : ''  }}</span>
             </div>
-            <div class="content artiledetail" style="border-bottom: 1px solid #e1e2e0; padding-bottom: 20px;">
-                {{ article.content }}
+            <div class="content artiledetail ql-editor" style="border-bottom: 1px solid #e1e2e0; padding-bottom: 20px;" v-html="article.content">
+                
             </div>
             <div class="f-cb"></div>
             <div class="mt20 f-fwn fs-24 fc-grey comment" style="border-top: 1px solid #e1e2e0; padding-top: 20px;">
@@ -87,13 +87,9 @@ export default {
   data () {
     return {
         message: '',  //评论内容
-        article: {},
-        username: '',
-        time: '',
-        day: '',
-        years: '',
-        mou: "",
-        comment: [],
+        article: {},  //文章对象
+        username: '', //用户名
+        comment: [], //评论内容
         msg: '',
         value: ''  //回复内容
     }
@@ -102,7 +98,7 @@ export default {
       onSubmit(){
           let id = this.$route.params.id
           this.$ajax.post('/comment/submit',{content: this.message,article: id}).then(res =>{
-              console.log(res)
+            //   console.log(res)
               if(res.data.status == 0){
                   this.open6()
                   this.getDetails()
@@ -121,17 +117,10 @@ export default {
         //   console.log(this.$route.params.id)
           let id = this.$route.params.id
           this.$ajax.get('/article/details/'+ id).then(res =>{
-                let item = res.data.article;
-                this.time = item.createTime.slice(0,19).replace(/[a-zA-Z]/g, " ")
-                this.day = item.createTime.slice(8,10);
-                this.years = item.createTime.slice(0,4);
-                this.mou = item.createTime.slice(5,7);
                 this.username = res.data.article.author.username
                 this.article = res.data.article;
                 res.data.comment.forEach((item) =>{
                     item.isReply = false;
-                    item.time = item.createTime.slice(0,10)
-                    
                     if(item.reply.length !== 0){
                         item.reply.forEach((item1) =>{
                             item1.isReply = false;

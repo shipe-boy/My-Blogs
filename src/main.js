@@ -13,6 +13,12 @@ import '../static/css/blog.css'
 import '../static/layui/css/layui.css'
 import '../static/font-awesome/css/font-awesome.min.css'
 import '../static/css/animate.min.css'
+//富文本编辑器
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+//代码高亮
+import 'highlight.js/styles/xcode.css'
 
 Vue.use(Vuex)
 
@@ -22,27 +28,27 @@ Vue.config.productionTip = false
 
 
 const store = new Vuex.Store({
-  state: {
-    username: '',
-    userface: '',
-  },
-  mutations: {
-    userName(state, username){
-      state.username = username;
+    state: {
+        username: '',
+        userface: '',
     },
-    userFace(state, userface){
-      state.userface = userface;
+    mutations: {
+        userName(state, username) {
+            state.username = username;
+        },
+        userFace(state, userface) {
+            state.userface = userface;
+        }
     }
-  }
 })
 
 
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  store,
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    store,
+    router,
+    components: { App },
+    template: '<App/>'
 })

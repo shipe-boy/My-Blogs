@@ -96,7 +96,8 @@ export default {
                             this.$store.commit('userFace', res.data.result.userface)
                           
                             this.$emit('on-close')
-                          
+                            this.ruleForm2.name = "";
+                            this.ruleForm2.pass = "";
                         }else{
                           this.msg = res.data.msg
                           this.open4()

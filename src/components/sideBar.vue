@@ -86,7 +86,9 @@ export default {
   },
   methods:{
       chengeList(type){
-          if(type){
+          this.$router.push('/index')
+          connect.$emit('type',type)
+          /* if(type){
             this.$ajax.get("/article/articles/"+type).then( res => {
                 connect.$emit('type',res.data.result)
             }).catch((err) => {
@@ -94,7 +96,7 @@ export default {
             })
           }else{
             connect.$emit('all')
-          }
+          } */
       }
   }
 }

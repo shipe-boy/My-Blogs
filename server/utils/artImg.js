@@ -4,7 +4,7 @@ const { join } = require("path")
 const storage = multer.diskStorage({
         //存储位置
         destination: function(req, file, cb) {
-            cb(null, join(__dirname, "../public/images/avatar"));
+            cb(null, join(__dirname, "../public/images/article"));
         },
         filename(req, file, cb) {
             const arrFilename = file.originalname.split(".")

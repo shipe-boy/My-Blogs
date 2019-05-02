@@ -7,6 +7,9 @@ const User = require("../module/user")
 const Board = require('../module/msgBoard')
 
 
+require('../utils/time')
+
+
 /* GET users listing. */
 /* router.get('/', function(req, res, next) {
   console.log(req)
@@ -28,6 +31,7 @@ router.post('/submit', async(req, res, next) => {
     let data = req.body;
     //添加用户id存到数据库
     data.author = req.session.userInfo._id;
+    data.time = new Date().Format('yyyy-MM-dd hh:mm:ss');
     // console.log(data)
     //存数据库
     let objComments = new Comment(data);
@@ -103,7 +107,7 @@ router.post('/artreply', async(req, res, next) => {
         face: req.session.userInfo.avatar,
         content: req.body.content,
         user2: req.body.user2,
-        time: req.body.time
+        time: new Date().Format('yyyy-MM-dd hh:mm:ss')
     }
 
     // console.log(req.body)
@@ -158,6 +162,7 @@ router.post('/addboard', async(req, res, next) => {
         user: req.session.userInfo.username,
         face: req.session.userInfo.avatar,
         content: req.body.content,
+        time: new Date().Format('yyyy-MM-dd hh:mm:ss')
     }
 
     let objBoard = new Board(data);
@@ -184,7 +189,7 @@ router.post('/reply', async(req, res, next) => {
         face: req.session.userInfo.avatar,
         content: req.body.content,
         user2: req.body.user2,
-        time: req.body.time
+        time: new Date().Format('yyyy-MM-dd hh:mm:ss')
     }
 
     // console.log(req.body)

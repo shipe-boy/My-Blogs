@@ -7,7 +7,9 @@
 		<!-- 头部 -->
 		<header-nav></header-nav>
 		
+        <transition name="fade" mode="out-in">
 		<router-view></router-view>
+        </transition>
 		<!-- 内容区域 -->
 		<!-- <articles></articles> -->
 		<!-- 留言板 -->
@@ -58,5 +60,14 @@ export default {
 </script>
 <style scoped>
 .header{margin:0 auto;width:100%;height:100%;background-color:#000;position:fixed!important;background-image:url('../assets/bg3.jpg');background-size:100% 100%}
-
+.fade-enter-active {
+    transition: all .5s;
+  }
+  .fade-enter {
+    opacity: 0;
+  }
+  .fade-leave-active {
+    transition: all .5s;
+    opacity: 0;
+  }
 </style>
