@@ -13,14 +13,14 @@
                     <ul class="search-result"></ul>
                 </div>
                 <ul class="category mt20" id="category">
-                    <li data-index="0" class="slider"></li>
-                    <li data-index="1"><a @click='chengeList()'>全部文章</a></li>
-                    <li data-index="2"><a @click='chengeList("HTML5和CSS3")'>HTML5和CSS3</a></li>
-                    <li data-index="3"><a @click='chengeList("JavaScript")'>JavaScript</a></li>
-                    <li data-index="4"><a @click='chengeList("Vue")'>Vue</a></li>
-                    <li data-index="5"><a @click='chengeList("Node")'>Node</a></li>
-                    <li data-index="6"><a @click='chengeList("React")'>React</a></li>
-                    <li data-index="6"><a @click='chengeList("其他")'>其他</a></li>
+                    <li data-index="0" class="slider"></li> 
+                    <li data-index="1" @click="checked"><a @click='chengeList()'>全部文章</a></li>
+                    <li data-index="2" @click="checked"><a @click='chengeList("HTML5和CSS3")'>HTML5和CSS3</a></li>
+                    <li data-index="3" @click="checked"><a @click='chengeList("JavaScript")'>JavaScript</a></li>
+                    <li data-index="4" @click="checked"><a @click='chengeList("Vue")'>Vue</a></li>
+                    <li data-index="5" @click="checked"><a @click='chengeList("Node")'>Node</a></li>
+                    <li data-index="6" @click="checked"><a @click='chengeList("React")'>React</a></li>
+                    <li data-index="7" @click="checked"><a @click='chengeList("其他")'>其他</a></li>
                 </ul>
             </div>
 
@@ -88,15 +88,19 @@ export default {
       chengeList(type){
           this.$router.push('/index')
           connect.$emit('type',type)
-          /* if(type){
-            this.$ajax.get("/article/articles/"+type).then( res => {
-                connect.$emit('type',res.data.result)
-            }).catch((err) => {
-                console.log(err)
-            })
-          }else{
-            connect.$emit('all')
-          } */
+      },
+      //选中样式切换
+      checked(e){
+        //   console.log(e)
+        let target;
+        if(e.target.nodeName == 'A'){
+            target = e.target.parentNode;
+        }else{
+            target = e.target;
+        }
+        let index = target.getAttribute('data-index');
+        let checkLi = document.querySelector(".other-item .category li.slider");
+        checkLi.style.top = (index -1) * 40 + 'px';
       }
   }
 }
@@ -104,4 +108,5 @@ export default {
 </script>
 <style scoped>
 #category li{cursor: pointer;}
+.other-item .category li.slider{border-right:6px solid #484947;height:40px;background-color:#f8f9f7;position:absolute;top:0;left:0;right:0;z-index:0;transition:top .3s}
 </style>

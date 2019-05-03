@@ -53,7 +53,7 @@ export default {
             if (value.trim() === '') {
               callback(new Error('请输入密码'));
             }else{
-              this.$ajax.post('/users/ispwd',{password:value})
+              this.$ajax.post('/users/ispwd',{username:this.ruleForm2.name,password:value})
                     .then(res =>{
                         if(res.data.status == 0){
                             callback()

@@ -28,13 +28,14 @@ router.post('/isuser', (req, res, next) => {
 })
 router.post('/ispwd', async(req, res, next) => {
     let password = req.body.password;
-    await User.find({ password: crypto(password) })
+    let username = req.body.username;
+    await User.find({ username, password: crypto(password) })
         .then(response => {
             if (response.length == 0) {
                 res.json({
                     status: 1
                 })
-            } else {
+            } else { //通过
                 res.json({
                     status: 0
                 })
@@ -250,7 +251,7 @@ router.post('/update', async(req, res, next) => {
     res.json(data)
 })
 
-//当前用户信息
+//获取当前用户信息
 router.get('/userinfo', async(req, res, next) => {
     let Id = req.session.userInfo._id
     User.findOne({ _id: Id })
@@ -276,9 +277,10 @@ router.get('/userinfo', async(req, res, next) => {
         })
 })
 
+//修改用户资料
 router.post("/edit", (req, res, next) => {
     let Id = req.session.userInfo._id;
-    userInfo = req.body.userInfo;
+    let userInfo = req.body.userInfo;
     User.updateOne({ _id: Id }, { $set: { 'username': userInfo.username, 'sex': userInfo.sex, 'phone': userInfo.phone, 'email': userInfo.email, 'birth': userInfo.birth } })
         .then(response => {
             res.json({
@@ -293,4 +295,21 @@ router.post("/edit", (req, res, next) => {
         })
 })
 
+//修改用户密码
+router.post("/editorPwd", (req, res, next) => {
+    let Id = req.session.userInfo._id;
+    let password = req.body.pass;
+    User.updateOne({ _id: Id }, { $set: { 'password': crypto(password) } })
+        .then(response => {
+            res.json({
+                status: "0",
+                msg: '修改成功'
+            }).catch(err => {
+                res.json({
+                    status: '1',
+                    msg: err.message
+                })
+            })
+        })
+})
 module.exports = router;

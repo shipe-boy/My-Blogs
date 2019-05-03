@@ -14,7 +14,9 @@
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
           </el-tab-pane>
-          <el-tab-pane label="修改密码">修改密码</el-tab-pane>
+          <el-tab-pane label="修改密码">
+              <editor-pwd></editor-pwd>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -25,6 +27,7 @@
 
 <script>
 import usersMore from '../components/userMore'
+import editorPwd from '../components/editorPwd'
   export default {
     data() {
       return {
@@ -32,7 +35,8 @@ import usersMore from '../components/userMore'
       }
     },
     components:{
-        usersMore
+        usersMore,
+        editorPwd
     },
     methods: {
       

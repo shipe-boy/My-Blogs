@@ -185,7 +185,7 @@ router.get('/list/:type/:page', async(req, res, next) => {
                     msg: '',
                     result: {
                         artList: doc.article,
-                        maxNum: doc.length
+                        maxNum: doc.article.length
                     }
                 })
             })

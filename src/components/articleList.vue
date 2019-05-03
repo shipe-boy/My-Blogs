@@ -2,8 +2,7 @@
 <template>
   <article class="article-list bloglist" id="LAY_bloglist">
     <transition-group name="fade">
-      <section v-if="articleList.length !== 0" class="article-item article" v-for="(item,index) in articleList"
-        :key="index">
+      <section v-if="articleList.length !== 0" class="article-item article" v-for="(item,index) in articleList" :key="index">
         <div class="fc-flag" v-show="item.isTop">置顶</div>
         <h5 class="title">
           {{item.title}}
@@ -37,7 +36,10 @@
         </aside>
       </section>
     </transition-group>
-      <section class="article-item article">
+    <section  v-if="articleList.length == 0" class="article-item article">
+        <p>还没有相关类型的文章</p>
+    </section>
+      <section  v-if="articleList.length !== 0" class="article-item article">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pageIndex"
           background :page-size="5" layout="total, prev, pager, next, jumper" :total="maxNum">
         </el-pagination>
@@ -46,78 +48,79 @@
 </template>
 
 <script>
-  import connect from './Bus'
-  export default {
-    data() {
-      return {
-        pageIndex: 1,
-        maxNum: 0,
-        articleList: []
-      }
-    },
-    methods: {
-      getList(type) {
-        type = type || "all";
-        this.$ajax.get('/article/list/' + type + "/" + this.pageIndex).then((res) => {
+import connect from "./Bus";
+export default {
+  data() {
+    return {
+      pageIndex: 1,
+      maxNum: 0,
+      articleList: []
+    };
+  },
+  methods: {
+    getList(type) {
+      type = type || "all";
+      this.$ajax
+        .get("/article/list/" + type + "/" + this.pageIndex)
+        .then(res => {
           if (res.data.status == 0) {
             // console.log(res)
             this.articleList = res.data.result.artList;
             this.maxNum = res.data.result.maxNum;
           }
-        }).catch(err => {
-          console.log(err)
         })
-      },
-      handleSizeChange(val) {
-        // console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        this.pageIndex = val;
-        document.documentElement.scrollTop = 0;
-        this.getList()
-      }
+        .catch(err => {
+          console.log(err);
+        });
     },
-    mounted() {
-      this.getList()
+    handleSizeChange(val) {
+      // console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.pageIndex = val;
       document.documentElement.scrollTop = 0;
-
-      connect.$on('type', (type) => {
-        // console.log(type)
-        this.$router.push('/index') //返回首页
-        this.getList(type)
-      })
-
+      this.getList();
     }
-  }
+  },
+  mounted() {
+    this.getList();
+    document.documentElement.scrollTop = 0;
 
+    connect.$on("type", type => {
+      // console.log(type)
+      this.$router.push("/index"); //返回首页
+      this.pageIndex = 1;
+      this.getList(type);
+    });
+  }
+};
 </script>
 <style scoped>
-  .doc-container .content {
-    max-height: 200px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    -webkit-line-clamp: 7;
-  }
+.doc-container .content {
+  max-height: 200px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 7;
+}
 
-  .doc-container .content a {
-    color: #424242;
-    text-decoration: none;
-  }
+.doc-container .content a {
+  color: #424242;
+  text-decoration: none;
+}
 
-  .fade-enter-active {
-    transition: all .5s;
-  }
+.fade-enter-active {
+  transition: all 0.5s;
+}
 
-  .fade-enter {
-    transform: translateX(100%);
-  }
+.fade-enter {
+  transform: translateX(100%);
+}
 
-  .fade-leave-active {
-    transition: all .5s;
-    transform: translateX(-100%);
-  }
-
+.fade-leave-active {
+  transition: all 0.5s;
+  transform: translateX(-100%);
+}
 </style>
