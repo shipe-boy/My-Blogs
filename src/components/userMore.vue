@@ -124,5 +124,3 @@ import '../../static/uitls/time.js'
   }
 
 </script>
-<style scoped>
-</style>
