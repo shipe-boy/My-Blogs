@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <article class="article-list bloglist" id="LAY_bloglist">
-    <transition-group name="fade">
+    <!-- <transition-group name="fade"> -->
       <section v-if="articleList.length !== 0" class="article-item article" v-for="(item,index) in articleList" :key="index">
         <div class="fc-flag" v-show="item.isTop">置顶</div>
         <h5 class="title">
@@ -35,7 +35,7 @@
           </div>
         </aside>
       </section>
-    </transition-group>
+    <!-- </transition-group> -->
     <section  v-if="articleList.length == 0" class="article-item article">
         <p>还没有相关类型的文章</p>
     </section>
@@ -58,8 +58,9 @@ export default {
     };
   },
   methods: {
-    getList(type) {
-      type = type || "all";
+    getList() {
+    let type = this.$route.params.type;
+    type = type || "all";
       this.$ajax
         .get("/article/list/" + type + "/" + this.pageIndex)
         .then(res => {
@@ -88,9 +89,10 @@ export default {
 
     connect.$on("type", type => {
       // console.log(type)
-      this.$router.push("/index"); //返回首页
+    //   console.log('/index/articles/articleList' + "/" + type)
+      this.$router.push('/index/articles/List' + "/" + type); //返回首页
       this.pageIndex = 1;
-      this.getList(type);
+      this.getList();
     });
   }
 };

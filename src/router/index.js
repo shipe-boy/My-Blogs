@@ -22,74 +22,72 @@ import Userinfo from '../views/userinfo'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
-  routes: [
-    //初始页面
-    {
-      path: '/',
-      name: 'start',
-      component: Start
-    },
-    {
-      path: '/index',
-      name: 'index',
-      component: Index,
-      redirect: '/index/articles',
-      children: [
+    mode: 'history',
+    routes: [
+        //初始页面
         {
-          path: 'articles',
-          name: 'articles',
-          component: Articles,
-          redirect: 'articles/articleList',
-          children: [
-            {
-              path: 'articleList',
-              name: "articleList",
-              component: ArticleList
-            },
-            {
-              path: 'articleDetails/:id',
-              name: "articleDetails",
-              component: ArticleDetails
-            }
-          ]
+            path: '/',
+            name: 'start',
+            component: Start
         },
         {
-          path: 'linkpage',
-          name: 'linkpage',
-          component: LinkPage
-        },
-        {
-          path: 'msgboard',
-          name: 'msgboard',
-          component: MsgBoard
-        },
-        /* {
-          path: 'login',
-          name: 'login',
-          component: Login
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: Register
-        }, */
-        {
-          path: 'user',
-          name: 'user',
-          component: User
-        },
-        {
-          path: 'publish',
-          name: 'publish',
-          component: Publish
-        },
-        {
-          path: 'userinfo',
-          name: 'userinfo',
-          component: Userinfo
+            path: '/index',
+            name: 'index',
+            component: Index,
+            redirect: '/index/articles',
+            children: [{
+                    path: 'articles',
+                    name: 'articles',
+                    component: Articles,
+                    redirect: 'articles/List/all',
+                    children: [{
+                            path: 'List/:type',
+                            name: "articleList",
+                            component: ArticleList
+                        },
+                        {
+                            path: 'Details/:id',
+                            name: "articleDetails",
+                            component: ArticleDetails
+                        }
+                    ]
+                },
+                {
+                    path: 'linkpage',
+                    name: 'linkpage',
+                    component: LinkPage
+                },
+                {
+                    path: 'msgboard',
+                    name: 'msgboard',
+                    component: MsgBoard
+                },
+                /* {
+                  path: 'login',
+                  name: 'login',
+                  component: Login
+                },
+                {
+                  path: 'register',
+                  name: 'register',
+                  component: Register
+                }, */
+                {
+                    path: 'user',
+                    name: 'user',
+                    component: User
+                },
+                {
+                    path: 'publish',
+                    name: 'publish',
+                    component: Publish
+                },
+                {
+                    path: 'userinfo',
+                    name: 'userinfo',
+                    component: Userinfo
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 })

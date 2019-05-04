@@ -154,10 +154,8 @@
       },
       handleSelect(key, keyPath) {
         this.isOpen = false; //移动端
-        // console.log("/article/articles/" + key);
         if (keyPath[0] === "2" || key === "1") {
           key = key == "1" ? "all" : key;
-          this.$router.push('/index')
           connect.$emit('type', key)
         }
       },

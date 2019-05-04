@@ -180,12 +180,20 @@ router.get('/list/:type/:page', async(req, res, next) => {
                     })
                 }
                 // console.log(doc)  //已经填充了的类型表
+                let artList = [],
+                    maxNum = doc.article.length;
+                for (let i = (page - 1) * 5; i < page * 5; i++) {
+                    if (i >= maxNum) {
+                        break;
+                    }
+                    artList.push(doc.article[i])
+                }
                 res.json({
                     status: 0,
                     msg: '',
                     result: {
-                        artList: doc.article,
-                        maxNum: doc.article.length
+                        artList,
+                        maxNum
                     }
                 })
             })

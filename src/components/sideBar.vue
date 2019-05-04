@@ -14,7 +14,7 @@
                 </div>
                 <ul class="category mt20" id="category">
                     <li data-index="0" class="slider"></li> 
-                    <li data-index="1" @click="checked"><a @click='chengeList()'>全部文章</a></li>
+                    <li data-index="1" @click="checked"><a @click='chengeList("all")'>全部文章</a></li>
                     <li data-index="2" @click="checked"><a @click='chengeList("HTML5和CSS3")'>HTML5和CSS3</a></li>
                     <li data-index="3" @click="checked"><a @click='chengeList("JavaScript")'>JavaScript</a></li>
                     <li data-index="4" @click="checked"><a @click='chengeList("Vue")'>Vue</a></li>

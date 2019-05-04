@@ -1,8 +1,9 @@
 <!--  -->
 <template>
   <div>
-		<div class="header">
-		</div>
+		<!-- <div class="header">
+		</div> -->
+        <bg></bg>
 
 		<!-- 头部 -->
 		<header-nav></header-nav>
@@ -30,6 +31,7 @@
 </template>
 
 <script>
+import Bg from '../components/bg'
 
 //组件
 import Articles from '../components/articles' //文章组件
@@ -49,17 +51,18 @@ export default {
 		Login,
 		Register,
 		User,
-		Publish
+        Publish,
+        Bg
 	},
 	data () {
 		return {
 		}
-	}
+    }
 }
 
 </script>
 <style scoped>
-.header{margin:0 auto;width:100%;height:100%;background-color:#000;position:fixed!important;background-image:url('../assets/bg3.jpg');background-size:100% 100%}
+/* .header{margin:0 auto;width:100%;height:100%;background-color:#000;position:fixed!important;background-image:url('../assets/bg3.jpg');background-size:100% 100%} */
 .fade-enter-active {
     transition: all .5s;
   }
