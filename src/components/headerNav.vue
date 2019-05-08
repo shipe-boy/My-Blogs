@@ -18,7 +18,7 @@
               <el-menu-item index="React">React</el-menu-item>
               <el-menu-item index="其他">其他</el-menu-item>
             </el-submenu>
-            <el-menu-item index="3">举个栗子</el-menu-item>
+            <el-menu-item index="3"><router-link :to="{name: 'example'}">举个栗子</router-link></el-menu-item>
             <el-menu-item index="4">
               <router-link :to="{name: 'linkpage'}">友情链接</router-link>
             </el-menu-item>
@@ -39,7 +39,7 @@
               @close="handleClose">
               <el-menu-item index="1">
                 <span slot="title">
-                  <router-link :to="{name: 'articleList'}">首页</router-link>
+                  <router-link :to="{name: 'index'}">首页</router-link>
                 </span>
               </el-menu-item>
               <el-submenu index="2">
@@ -77,7 +77,7 @@
           <!-- 登陆注册按钮 -->
           <a v-if="!username" class="blog-user" href="javascript:;" @click="loging = true;isRegist = false">登陆/注册</a>
           <!-- 登陆注册弹框 -->
-          <el-dialog title="欢迎回来！" :visible.sync="loging" :modal-append-to-body="false">
+          <el-dialog custom-class="dialog" title="欢迎回来！" :visible.sync="loging" :modal-append-to-body="false">
             <login v-if="!isRegist" @on-close="closeDialog();" @on-change="toogle"></login>
             <register v-if="isRegist" @on-close="closeDialog()"></register>
           </el-dialog>
@@ -88,14 +88,14 @@
                 <img :src='"http://localhost:3000"+ userface' :alt="username">
                 <span>{{ username }}</span>
               </span>
-              <el-dropdown-menu slot="dropdown">
+              <el-dropdown-menu slot="dropdown" hide-on-click="true">
                 <el-dropdown-item>
                   <router-link :to="{name: 'userinfo'}">个人资料</router-link>
                 </el-dropdown-item>
                 <el-dropdown-item>
                   <router-link :to="{name: 'user',query: {role}}">管理中心</router-link>
                 </el-dropdown-item>
-                <el-dropdown-item>
+                <el-dropdown-item v-if="role> 990">
                   <router-link :to="{name: 'publish'}">文章发表</router-link>
                 </el-dropdown-item>
                 <el-dropdown-item command="loginOut" divided>退出登陆</el-dropdown-item>
@@ -128,6 +128,7 @@
     },
     computed: {
       username() {
+          this.getUserInfo()
         return this.$store.state.username;
       },
       userface() {
@@ -341,7 +342,8 @@
   @media screen and (max-width:1024px) {
     .header-logo {
       left: 25%;
-      width: 50%
+      width: 50%;
+      font-size:24px;
     }
 
     .header-nav {
@@ -358,9 +360,9 @@
     }
 
     .phone-menu {
-      display: block
+      display: block;
     }
-
+    
     .header-nav.phone {
       display: block;
       visibility: hidden;
@@ -398,8 +400,12 @@
       width: 50%;
       height: 100%;
     }
+    
   }
-
+.el-dialog.dialog{
+        background-color: red;
+        width: 100% ;
+    }
 
   .menu-enter-active {
     transition: all .5s;

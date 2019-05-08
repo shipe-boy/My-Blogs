@@ -2,10 +2,10 @@
 <template>
     <div>
         <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2"  class="demo-ruleForm" label-width="100px">
-            <el-form-item style="width:50%;" label="昵称" prop="name">
+            <el-form-item label="昵称" prop="name">
                 <el-input  v-model="ruleForm2.name"></el-input>
             </el-form-item>
-            <el-form-item style="width:50%;" label="密码" prop="pass">
+            <el-form-item label="密码" prop="pass">
                 <el-input  type="password" v-model="ruleForm2.pass" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item>
@@ -135,10 +135,10 @@ export default {
 <style scoped>
 /* .doc-container{position:relative;padding-top:60px;-webkit-transition:all .2s;transition:all .2s;min-height:100vh}
 .container-fixed{width:1280px;margin-left:auto;margin-right:auto;position:relative;background-color: #eee;}
-.container-inner{width: 100%;margin:0 auto;padding: 50px 0 ;}
-@media screen and (max-width:1366px){.container-fixed{width:90%}.container-inner{width: 600px;}}
-@media screen and (max-width:1024px){.container-fixed{width:90%}.container-inner{width: 100%;}} */
-.contact{height:30px;margin-bottom: 20px;}
+.container-inner{width: 100%;margin:0 auto;padding: 50px 0 ;}*/
+@media screen and (max-width:1366px){.container-fixed{width:90%}.container-inner{width: 600px;}.el-input{width: 50%;}}
+@media screen and (max-width:1024px){.container-fixed{width:90%}.container-inner{width: 100%;}.el-input{width: 100%;}} 
+.contact{margin-bottom: 20px;}
 .contact a{display:inline-block;width:30px;height:30px;opacity:.5;background-color:purple;text-align:center;line-height:30px;text-shadow:1px 1px 1px rgba(0,0,0,.5);font-size:14px;margin-left:15px;margin-right:0;border-radius:100%;text-decoration:none;color:rgba(255,255,255,.5);-webkit-transition:all .3s;transition:all .3s}
 .contact a:hover{color:#fff}
 .contact .phone:hover{background-color:#b952c5}

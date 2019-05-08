@@ -45,12 +45,24 @@ router.post('/submit', async(req, res, next) => {
 
             //更新文章评论计数器
             Article
-                .updateOne({ _id: data.article }, { $inc: { commentNum: 1 } })
+                .updateOne({
+                    _id: data.article
+                }, {
+                    $inc: {
+                        commentNum: 1
+                    }
+                })
                 .then(data => data, err => err)
 
             //更新用户的评论计数器
             User
-                .updateOne({ _id: data.author }, { $inc: { commentNum: 1 } }, err => {
+                .updateOne({
+                    _id: data.author
+                }, {
+                    $inc: {
+                        commentNum: 1
+                    }
+                }, err => {
                     if (err) return console.log(err)
                 })
         }, err => {
@@ -67,7 +79,9 @@ router.get('/allcomment', async(req, res, next) => {
 
     const userId = req.session.userInfo._id;
 
-    const data = await Comment.find({ author: userId }).populate("article", "title")
+    const data = await Comment.find({
+            author: userId
+        }).populate("article", "title")
         // console.log(data)//data是个数组包含同一个userid的所有评论
 
     res.json({
@@ -83,51 +97,103 @@ router.get('/del/:id', async(req, res, next) => {
     const commentId = req.params.id;
 
     let data = {
-        state: 0,
-        message: "成功"
-    }
-
+            state: 0,
+            message: "成功"
+        }
+        //先通过id找找是回复还是评论
     await Comment.findById(commentId)
-        .then(data => data.remove())
+        .then(data => {
+            // console.log(typeof data.reply[0])
+            if (typeof data.reply[0] == 'string') { //删除的是回复
+                let _id = data.reply[0];
+                let id = data.reply[1];
+                Comment.update({ //删除的是回复数组对应项
+                    _id
+                }, {
+                    $pull: {
+                        'reply': {
+                            id
+                        }
+                    }
+                }).then(doc => {
+                    console.log(11, doc)
+                }).catch(err1 => {
+                    console.log(err)
+                    data = {
+                        state: 1,
+                        message: err
+                    }
+                })
+            } else {
+                data.reply.forEach(item => {
+                    Comment.deleteOne({ id: item.id }).then(ok => {
+
+                    })
+                })
+            }
+        })
         .catch(err => {
             data = {
                 state: 1,
                 message: err
             }
         })
-
+        //删除对应回复的集合
+    await Comment.findById(commentId)
+        .then(data => {
+            data.remove()
+        })
+        .catch(err => {
+            data = {
+                state: 1,
+                message: err
+            }
+        })
     res.json(data);
 })
 
 //文章详情页的回复
 router.post('/artreply', async(req, res, next) => {
     let id = req.body.id;
+    //创建一个标识
+    let platFrom = '410306', //一个假设的平台码
+        r1 = Math.floor(Math.random() * 10),
+        r2 = Math.floor(Math.random() * 10),
+        sysDate = new Date().Format('yyyyMMddhhmmss'); //系统时间
+    let orderId = platFrom + r1 + sysDate + r2;
+
     let data = {
+        author: req.session.userInfo._id,
         user: req.session.userInfo.username,
         face: req.session.userInfo.avatar,
         content: req.body.content,
         user2: req.body.user2,
+        reply: [id, orderId], //回复的回复数组里存了父评论的id;
+        id: orderId,
         time: new Date().Format('yyyy-MM-dd hh:mm:ss')
     }
 
-    // console.log(req.body)
-    // console.log(data)
 
-    await Comment.findOne({ _id: id })
-        .then(doc => {
-            // console.log(doc)
-            doc.reply.push(data)
-            doc.save()
-            res.json({
-                status: 0,
-                msg: ''
+    new Comment(data).save().then(doc => { //先创建集合
+        Comment.findOne({ //再将对应集合添加到评论里
+                _id: id
             })
-        }).catch(err => {
-            res.json({
-                status: 0,
-                msg: err.message
+            .then(doc1 => {
+                data._id = doc._id;
+                doc1.reply.push(data)
+                doc1.save()
+                res.json({
+                    status: 0,
+                    msg: ''
+                })
             })
+    }).catch(err => {
+        res.json({
+            status: 1,
+            msg: err.message
         })
+    })
+
 })
 
 
@@ -195,7 +261,9 @@ router.post('/reply', async(req, res, next) => {
     // console.log(req.body)
     // console.log(data)
 
-    await Board.findOne({ _id: id })
+    await Board.findOne({
+            _id: id
+        })
         .then(doc => {
             // console.log(doc)
             doc.reply.push(data)

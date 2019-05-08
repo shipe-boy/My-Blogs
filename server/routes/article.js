@@ -186,6 +186,7 @@ router.get('/list/:type/:page', async(req, res, next) => {
                     if (i >= maxNum) {
                         break;
                     }
+                    // doc.article[i].i = i;
                     artList.push(doc.article[i])
                 }
                 res.json({
@@ -234,11 +235,14 @@ router.get('/details/:id', async(req, res, next) => {
             console.log("报错了")
         })
 
+    //返回当前访问者信息
+    let login = req.session.userInfo ? req.session.userInfo.username : "";
     //渲染页面
     await res.json({
         title: article.title,
         article,
-        comment
+        comment,
+        login
     })
 })
 
@@ -314,5 +318,22 @@ router.post('/img', async(req, res, next) => {
     })
 })
 
+//侧边栏搜索功能
+router.post('/search', async(req, res, next) => {
+    let search = req.body.search;
+    Article.find({ title: { $regex: search } }).then(doc => {
+        // console.log(doc)
+        res.json({
+            status: 0,
+            result: doc,
+            msg: 'success'
+        })
+    }).catch(err => {
+        res.json({
+            status: 1,
+            msg: err.message
+        })
+    })
+})
 
 module.exports = router;

@@ -10,6 +10,7 @@ const commentSchema = new Schema({
     content: String, //文章内容
     reply: Array,
     time: String,
+    id: String,
     author: {
         type: ObjectId,
         ref: "users"

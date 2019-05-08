@@ -11,8 +11,7 @@ import Index from '../views/index'
 import LinkPage from '../views/link'
 import MsgBoard from '../views/msgboard'
 import Articles from '../components/articles'
-// import Login from '../views/login'
-// import Register from '../views/register'
+import Example from '../views/example'
 import User from '../views/user'
 import ArticleList from '../components/articleList'
 import ArticleDetails from '../components/articleDetails'
@@ -62,16 +61,11 @@ export default new Router({
                     name: 'msgboard',
                     component: MsgBoard
                 },
-                /* {
-                  path: 'login',
-                  name: 'login',
-                  component: Login
-                },
                 {
-                  path: 'register',
-                  name: 'register',
-                  component: Register
-                }, */
+                    path: 'example',
+                    name: 'example',
+                    component: Example
+                },
                 {
                     path: 'user',
                     name: 'user',

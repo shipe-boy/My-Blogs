@@ -1,14 +1,15 @@
 <template>
   <div class="start">
     <div class="section" id="section1">
+        <img class="bg" v-lazy='"http://localhost:3000/images/blogs/bg1.jpg"' alt="">
         <div class="fp-tablecell">
             <div class="page1">
-                <div class="nav wow zoomIn" data-wow-duration="2s">
+                <div class="nav">
                     <h1>BookFish</h1>
                     <p>桃李不言，下自成蹊</p>
                     <router-link class="layui-btn layui-btn-normal" style="margin-top: 20px" :to="{name: 'index'}">Enter Blog</router-link>
                 </div>
-                <a class="next wow fadeInUp" data-wow-duration="2s" id="next"></a>
+                <a class="next" id="next" href="#section2"></a>
             </div>
         </div>
     </div>
@@ -170,13 +171,24 @@
             </div>
         </div>  
     </footer>
+    <back-top></back-top>
   </div>
 </template>
 
 <script>
 import '../../static/css/index_style.css'
 
+import BackTop from '../components/backTop';    //回到顶部
+
 export default {
   name: 'start',
+  components:{
+      BackTop
+  },
+  methods:{
+  },
+  mounted(){
+      document.documentElement.scrollTop = 0;
+  }
 }
 </script>

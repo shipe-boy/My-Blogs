@@ -17,16 +17,13 @@
 		<!-- <msg-board></msg-board> -->
 		<!-- 友情链接 -->
 		<!-- <link-page></link-page> -->
-		<!-- 登陆页面 -->
-		<!-- <login></login> -->
-		<!-- 注册页面 -->
-		<!-- <register></register> -->
 		<!-- 个人中心 -->
 		<!-- <users></users> -->
 		<!-- 文章发表页 -->
 		<!-- <publish></publish> -->
 		<!-- 底部 -->
 		<footer-nav></footer-nav>
+        <back-top></back-top>
   </div>
 </template>
 
@@ -37,10 +34,10 @@ import Bg from '../components/bg'
 import Articles from '../components/articles' //文章组件
 import LinkPage from './link'  //友情链接
 import MsgBoard from './msgboard'  //留言板
-import Login from './login'  //登陆页面
-import Register from './register'  //注册页面
 import User from './user' //用户管理页面
 import Publish from './publish'   //文章发表页
+
+import BackTop from '../components/backTop';    //回到顶部
 
 export default {
 	name: 'index',
@@ -48,11 +45,10 @@ export default {
 		Articles,
 		LinkPage,
 		MsgBoard,
-		Login,
-		Register,
 		User,
         Publish,
-        Bg
+        Bg,
+        BackTop
 	},
 	data () {
 		return {

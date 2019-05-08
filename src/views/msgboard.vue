@@ -155,7 +155,7 @@ export default {
                                     })
                                 }
                             })
-                            this.msgList = res.data.result
+                            this.msgList = res.data.result.reverse();
                         }
                     }).catch((err) => {
                         console.log(err)
