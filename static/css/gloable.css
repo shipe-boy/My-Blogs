@@ -280,3 +280,15 @@ h6 {
     box-sizing: content-box;
     text-decoration: none!important;
 }
+
+@media screen and (min-width:700px) {
+    .el-dialog {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width:699px) {
+    .el-dialog {
+        width: 100%;
+    }
+}

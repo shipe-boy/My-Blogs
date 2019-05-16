@@ -1,7 +1,7 @@
 <!--  -->
 <template>
     <div>
-        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2"  class="demo-ruleForm" label-width="100px">
+        <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2"  class="demo-ruleForm" label-width="80px">
             <el-form-item label="昵称" prop="name">
                 <el-input  v-model="ruleForm2.name"></el-input>
             </el-form-item>

@@ -3,19 +3,19 @@
   <div>
     <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
       <el-form-item label="昵称" prop="name" :required="true">
-        <el-input style="width:50%;" v-model.trim="ruleForm2.name"></el-input>
+        <el-input  v-model.trim="ruleForm2.name"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass" :required="true">
-        <el-input style="width:50%;" type="password" v-model.trim="ruleForm2.pass" autocomplete="off"></el-input>
+        <el-input  type="password" v-model.trim="ruleForm2.pass" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="确认密码" prop="checkPass" :required="true">
-        <el-input style="width:50%;" type="password" v-model.trim="ruleForm2.checkPass" autocomplete="off"></el-input>
+        <el-input type="password" v-model.trim="ruleForm2.checkPass" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
-        <el-input style="width:50%;" type="email" v-model.trim="ruleForm2.email" autocomplete="off"></el-input>
+        <el-input type="email" v-model.trim="ruleForm2.email" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
-        <el-input style="width:50%;" type="phone" v-model.trim="ruleForm2.phone" autocomplete="off"></el-input>
+        <el-input type="phone" v-model.trim="ruleForm2.phone" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>

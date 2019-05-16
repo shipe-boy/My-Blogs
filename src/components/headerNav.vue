@@ -3,7 +3,6 @@
   <header class="gird-header">
     <div class="header-fixed">
       <div class="header-inner">
-        <router-link class="header-logo" id="logo" to="/">Bookfish</router-link>
         <nav class="header-nav pc" id="nav">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
@@ -68,7 +67,13 @@
                   <router-link :to="{name: 'msgboard'}">留言板</router-link>
                 </span>
               </el-menu-item>
+              <el-menu-item index="6">
+                <span slot="title">
+                  <router-link class="header-logo" id="logo" to="/">Bookfish</router-link>
+                </span>
+              </el-menu-item>
             </el-menu>
+            
           </transition>
           <div v-if="isOpen" class="cover" @click="close"></div>
         </nav>
@@ -77,7 +82,7 @@
           <!-- 登陆注册按钮 -->
           <a v-if="!username" class="blog-user" href="javascript:;" @click="loging = true;isRegist = false">登陆/注册</a>
           <!-- 登陆注册弹框 -->
-          <el-dialog custom-class="dialog" title="欢迎回来！" :visible.sync="loging" :modal-append-to-body="false">
+          <el-dialog title="欢迎回来！" :visible.sync="loging" :modal-append-to-body="false">
             <login v-if="!isRegist" @on-close="closeDialog();" @on-change="toogle"></login>
             <register v-if="isRegist" @on-close="closeDialog()"></register>
           </el-dialog>
@@ -261,6 +266,7 @@
 
   .blog-user {
     position: absolute;
+    right: 0;
     line-height: 60px;
     font-size: 14px;
     cursor: pointer;
@@ -280,7 +286,7 @@
     display: inline-block;
     position: absolute;
     cursor: pointer;
-    right: 0;
+    left: 0;
     top: 5px
   }
 
@@ -413,28 +419,25 @@
     .header-nav ul {
       position: absolute;
       z-index: 2;
-      right: 0;
+      left: 0;
       width: 50%;
       height: 100%;
     }
     
   }
-.el-dialog.dialog{
-        background-color: red;
-        width: 100% ;
-    }
+
 
   .menu-enter-active {
     transition: all .5s;
   }
 
   .menu-enter {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
 
   .menu-leave-active {
     transition: all .5s;
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
 
 </style>

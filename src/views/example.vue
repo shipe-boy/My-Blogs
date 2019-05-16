@@ -5,50 +5,29 @@
       <div class="container-fixed">
         <div class="container-inner">
           <ul class="layui-timeline">
-            <li class="layui-timeline-item">
+            <li class="layui-timeline-item" v-for="(item,index) in exampleList" :key="index">
               <i class="layui-icon layui-timeline-axis"></i>
               <div class="layui-timeline-content layui-text">
-                <h3 class="layui-timeline-title">8月18日</h3>
-                <p>
-                  layui 2.0 的一切准备工作似乎都已到位。发布之弦，一触即发。
-                  <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
-                  <br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>
-                  <button  style="display:block;" class="layui-btn">查看答案</button>
-                </p>
-              </div>
-            </li>
-            <li class="layui-timeline-item">
-              <i class="layui-icon layui-timeline-axis"></i>
-              <div class="layui-timeline-content layui-text">
-                <h3 class="layui-timeline-title">8月16日</h3>
-                <p>杜甫的思想核心是儒家的仁政思想，他有<em>“致君尧舜上，再使风俗淳”</em>的宏伟抱负。个人最爱的名篇有：</p>
-                <ul>
-                  <li>《登高》</li>
-                  <li>《茅屋为秋风所破歌》</li>
-                </ul>
-              </div>
-            </li>
-            <li class="layui-timeline-item">
-              <i class="layui-icon layui-timeline-axis"></i>
-              <div class="layui-timeline-content layui-text">
-                <h3 class="layui-timeline-title">8月15日</h3>
-                <p>
-                  中国人民抗日战争胜利日
-                  <br>常常在想，尽管对这个国家有这样那样的抱怨，但我们的确生在了最好的时代
-                  <br>铭记、感恩
-                  <br>所有为中华民族浴血奋战的英雄将士
-                  <br>永垂不朽
-                </p>
-              </div>
-            </li>
-            <li class="layui-timeline-item">
-              <i class="layui-icon layui-timeline-axis"></i>
-              <div class="layui-timeline-content layui-text">
-                <div class="layui-timeline-title">过去</div>
+                <h3 class="layui-timeline-title">{{item.time}}</h3>
+                <p v-html="item.content"></p>
+                <transition name="fade">
+                  <div v-if="item.isOpen">
+                    <fieldset class="layui-elem-field layui-field-title">
+                      <legend>仅供参考</legend>
+                    </fieldset>
+                    <p v-html="item.answer"></p>
+                  </div>
+                </transition>
+                <p v-if="haha"></p>
+                <button style="display:block; margin-top: 8px;" class="layui-btn"
+                  @click="open(item)">{{item.isOpen ? '收起答案':'查看答案'}}</button>
               </div>
             </li>
           </ul>
-
+          <div class="load-more" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy"
+            infinite-scroll-distance="40">
+            <img v-if="loading" src="./../assets/loading-svg/loading-spinning-bubbles.svg" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -61,21 +40,63 @@
   export default {
     data() {
       return {
-          page: 1,
-          exampleList: []
+        page: 1,
+        exampleList: [],
+        haha: false,
+        busy: true, //false启用加载，true关闭加载
+        loading: false
       }
     },
     methods: {
-        init(){
-            this.$ajax.get('/article/examAll',{params:{page:this.page}}).then(res =>{
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
+      init(flag) {
+        this.loading = true;
+        console.log(this.page)
+        this.$ajax.get('/article/examAll', {
+          params: {
+            page: this.page
+          }
+        }).then(res => {
+          this.loading = false;
+          if (res.data.status == 0) {
+            if (flag) { //分页时  数据要累加
+              this.exampleList = this.exampleList.concat(res.data.result);
+
+              if (res.data.result.length == 0) {    //判断是否加载完
+                this.busy = true;
+              } else {
+                this.busy = false;
+              }
+
+            } else { //初次加载
+              this.exampleList = res.data.result;
+              this.busy = false;
+            }
+            // console.log(this.exampleList)
+            this.exampleList.forEach(item => {
+              item.isOpen = false;
             })
-        }
+          }
+          // console.log(this.exampleList)
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      open(item) {
+        // console.log(item,item.isOpen)
+        item.isOpen = !item.isOpen;
+        this.haha = !this.haha;
+        console.log(item.isOpen)
+      },
+      loadMore() {
+        this.busy = true;
+        setTimeout(() => {
+          this.page++;
+          this.init(true)
+        }, 500);
+      }
     },
-    mounted(){
-        this.init()
+    mounted() {
+      this.init()
     }
   }
 
@@ -107,6 +128,19 @@
     .container-fixed {
       width: 90%
     }
+  }
+
+  .fade-enter-active {
+    transition: all 0.5s linear;
+  }
+
+  .fade-enter {
+    height: 0;
+  }
+
+  .fade-leave-active {
+    transition: all 0.5s linear;
+    height: 0;
   }
 
 </style>

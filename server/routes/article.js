@@ -360,27 +360,70 @@ router.post('/exam', (req, res, next) => {
         })
 })
 
-router.get('/examAll/', async(req, res, next) => {
-    console.log(res.query, req.path)
-        // let page = req.params.id || 1;
-    let page = 1;
-    let examList = await Example
+router.get('/examAll', async(req, res, next) => {
+    // console.log(req.query, req.path)
+    let page = req.query.page || 1;
+    // console.log(page)
+    await Example
         .find()
         .sort("-createTime")
         .skip((page - 1) * 5) //数据库里从第几条开始找
         .limit(5) //获取几条数据
-        .then((data) => data, (err) => {
+        .then((data) => {
+            res.json({
+                status: 0,
+                msg: 'success',
+                result: data
+            })
+        }, (err) => {
             res.json({
                 status: 1,
                 msg: err.message
             })
             return
         });
-    await res.json({
-        status: 0,
-        msg: 'success',
-        result: examList
-    })
+
 })
 
+router.get('/allExam', async(req, res, next) => {
+    await Example
+        .find()
+        .sort("-createTime")
+        .then(data => {
+            res.json({
+                status: 0,
+                msg: 'success',
+                result: data
+            })
+        }).catch(err => {
+            res.json({
+                status: 1,
+                msg: err.message
+            })
+        })
+})
+
+//删除每日一题
+router.get('/delExam/:id', async(req, res, next) => {
+    //文章id
+    const _id = req.params.id;
+    let data = {
+        status: 0,
+        msg: "成功"
+    }
+
+    await Example.findById(_id)
+        .then(data => {
+            data.remove()
+        })
+        .catch(err => {
+            data = {
+                status: 1,
+                msg: err.message
+            }
+
+        })
+
+    res.json(data)
+})
 module.exports = router;
