@@ -3,11 +3,11 @@
   <header class="gird-header">
     <div class="header-fixed">
       <div class="header-inner">
-        <router-link class="header-logo" id="logo" :to="{name: 'start'}">Bookfish</router-link>
+        <router-link class="header-logo" id="logo" to="/">Bookfish</router-link>
         <nav class="header-nav pc" id="nav">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
-              <router-link :to="{name: 'index'}">首页</router-link>
+              <router-link to="/">首页</router-link>
             </el-menu-item>
             <el-submenu index="2">
               <template slot="title">文章</template>
@@ -56,7 +56,7 @@
                 </el-menu-item-group>
               </el-submenu>
               <el-menu-item index="3">
-                <span slot="title">举个栗子</span>
+                <span slot="title"><router-link :to="{name: 'example'}">举个栗子</router-link></span>
               </el-menu-item>
               <el-menu-item index="4">
                 <span slot="title">
@@ -98,6 +98,9 @@
                 <el-dropdown-item v-if="role> 990">
                   <router-link :to="{name: 'publish'}">文章发表</router-link>
                 </el-dropdown-item>
+                <el-dropdown-item v-if="role> 990">
+                  <router-link :to="{name: 'exPublish'}">每日一题</router-link>
+                </el-dropdown-item>
                 <el-dropdown-item command="loginOut" divided>退出登陆</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -119,7 +122,6 @@
     },
     data() {
       return {
-        activeIndex: '1',
         role: 1, //权限
         isOpen: false, //移动端
         loging: false, //登陆框
@@ -133,6 +135,20 @@
       },
       userface() {
         return this.$store.state.userface;
+      },
+      activeIndex(){
+        let path = this.$route.path;
+        if(path == '/example'){
+            return '3';
+        }else if(path == '/art/all'){
+            return '1';
+        }else if(path == '/linkpage'){
+            return '4';
+        }else if(path == '/example'){
+            return '5';
+        }else {
+            return '2';
+        }
       }
     },
     mounted() {
@@ -146,7 +162,7 @@
             this.$store.commit('userName', res.data.result.username)
             this.$store.commit('userFace', res.data.result.userface)
             this.role = res.data.result.role;
-            // console.log(this.role)
+            // console.log( this.userface)
             // console.log("http://localhost:3000"+ this.userface)
           }
         }).catch((err) => {
@@ -155,6 +171,7 @@
       },
       handleSelect(key, keyPath) {
         this.isOpen = false; //移动端
+        // console.log(key)
         if (keyPath[0] === "2" || key === "1") {
           key = key == "1" ? "all" : key;
           connect.$emit('type', key)
@@ -184,7 +201,7 @@
               this.$store.commit('userName', "")
               this.$store.commit('userFace', "")
             }
-              this.$router.push('/index') //返回首页
+              this.$router.push('/') //返回首页
           }).catch(err => {
             console.log(err)
           })

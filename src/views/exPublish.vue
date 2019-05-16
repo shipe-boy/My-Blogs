@@ -3,39 +3,22 @@
   <div class="doc-container" id="doc-container">
     <div class="container-fixed">
       <div class="container-inner">
-        <section class="msg-remark">
-          <h1>发表文章</h1>
-          <p>
-            <span>文章标题</span>
-            <el-input placeholder="文章标题" v-model="title" clearable style="width: 50%;margin-left:10px;"></el-input>
-          </p>
-        </section>
+        
         <div class="textarea-wrap message" id="textarea-wrap">
           <el-form ref="form">
             <!-- 富文本 -->
+            <p>每日一题：</p>
             <el-form-item>
-              <!-- <el-input type="textarea" :rows = "15"  v-model="content" ></el-input> -->
               <quill-editor v-model="content" ref="myQuillEditor" :options="editorOption"></quill-editor>
             </el-form-item>
+            <p>参考答案：</p>
             <el-form-item>
-              置&nbsp;&nbsp;&nbsp;顶&nbsp;&nbsp;&nbsp;&nbsp;<el-switch v-model="isTop" active-color="#13ce66"
-                inactive-color="#ff4949">
-              </el-switch>
+              <quill-editor v-model="answer" ref="myQuillEditor" :options="editorOption"></quill-editor>
             </el-form-item>
-            <el-form-item>
-              <span>类型选择：</span>
-              <el-checkbox-group v-model="checkboxGroup" size="small">
-                <el-checkbox label="HTML5和CSS3" border></el-checkbox>
-                <el-checkbox label="JavaScript" border></el-checkbox>
-                <el-checkbox label="Vue" border></el-checkbox>
-                <el-checkbox label="Node" border></el-checkbox>
-                <el-checkbox label="React" border></el-checkbox>
-                <el-checkbox label="其他" border></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
+            
+            
             <el-form-item>
               <el-button type="primary" @click="onSubmit">发表</el-button>
-              <el-button>取消</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -87,12 +70,10 @@
   export default {
     data() {
       return {
-        title: '',
         content: '',
-        isTop: false,
-        checkboxGroup: [],
-        // inputVisible: false,
-        // inputValue: '',
+        answer: '',
+        inputVisible: false,
+        inputValue: '',
         // 富文本框参数设置
         editorOption
       }
@@ -102,22 +83,20 @@
     },
     methods: {
       onSubmit() {
-        if (this.title.trim() === '' || this.content.trim() === '') {
+        if (this.answer.trim() === '' || this.content.trim() === '') {
           return
         }
         let obj = {
-          title: this.title,
-          content: this.content,
-          isTop: this.isTop,
-          types: this.checkboxGroup,
+          answer: this.answer,
+          content: this.content
         }
-        // console.log(obj)
-        this.$ajax.post('/article/publish', obj)
+        this.$ajax.post('/article/exam', obj)
           .then(res => {
+              console.log(res)
             if (res.data.status === 0) {
               this.open6()
               setTimeout(() => {
-                this.$router.push('/')
+                this.$router.push('/example')
               }, 1000)
             } else {
               this.open8()

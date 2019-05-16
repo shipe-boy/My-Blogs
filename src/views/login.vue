@@ -15,7 +15,7 @@
         </el-form>
         <div class="contact">
             <span>选择登陆方式：</span>
-            <a href="javascript:void(0)" class="phone" title="手机登陆"><i class="fa fa-phone"></i></a>
+            <a href="javascript:void(0)" class="phone" title="手机登陆"><i class="fa fa-mobile fa-2x"></i></a>
             <a href="javascript:void(0)" class="qq" title="QQ登陆"><i class="fa fa-qq"></i></a>
             <a href="javascript:void(0)" class="email" title="邮箱登陆"><i class="fa fa-envelope"></i></a>
             <a href="javascript:void(0)" class="weixin" title="微信登陆"><i class="fa fa-weixin"></i></a>
@@ -139,7 +139,7 @@ export default {
 @media screen and (max-width:1366px){.container-fixed{width:90%}.container-inner{width: 600px;}.el-input{width: 50%;}}
 @media screen and (max-width:1024px){.container-fixed{width:90%}.container-inner{width: 100%;}.el-input{width: 100%;}} 
 .contact{margin-bottom: 20px;}
-.contact a{display:inline-block;width:30px;height:30px;opacity:.5;background-color:purple;text-align:center;line-height:30px;text-shadow:1px 1px 1px rgba(0,0,0,.5);font-size:14px;margin-left:15px;margin-right:0;border-radius:100%;text-decoration:none;color:rgba(255,255,255,.5);-webkit-transition:all .3s;transition:all .3s}
+.contact a{display:inline-block;width:30px;height:30px;opacity:.5;background-color:purple;text-align:center;line-height:30px;text-shadow:1px 1px 1px rgba(0,0,0,.5);font-size:14px;margin-left:15px;margin-right:0;border-radius:100%;text-decoration:none;color:rgba(255,255,255,.5);-webkit-transition:all .3s;transition:all .3s;vertical-align: middle;}
 .contact a:hover{color:#fff}
 .contact .phone:hover{background-color:#b952c5}
 .contact .qq:hover{background-color:#d25744}

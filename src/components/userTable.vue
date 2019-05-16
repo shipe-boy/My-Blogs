@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <el-table :data="tableData" height="250" border style="width: 100%;height:400px;">
+  <el-table :data="tableData" height="250" border style="width: 100%;min-height:400px;">
     <el-table-column prop="username" label="名称" width="180">
     </el-table-column>
     <el-table-column prop="role" label="权限" width="180">
@@ -29,7 +29,7 @@ export default {
     methods:{
       getAllUser(){
         this.$ajax.get('/users/allusers').then(res =>{
-          // console.log(res)
+        //   console.log(res)
           this.tableData = res.data.response;
         }).catch(err =>{
           console.log(err)
@@ -44,7 +44,7 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$ajax.get('/users/del/' + id).then(res =>{
-              
+                    console.log(res)
                   this.getAllUser() 
             }).catch(err =>{ 
             })

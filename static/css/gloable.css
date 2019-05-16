@@ -1,133 +1,178 @@
-﻿.f-oh{
+﻿@font-face {
+    font-family: 'BarbaraHand';
+    src: url('../font/barbarahand-webfont.eot');
+    src: url('../font/barbarahand-webfont.eot?#iefix') format('embedded-opentype'), url('../font/barbarahand-webfont.woff2') format('woff2'), url('../font/barbarahand-webfont.woff') format('woff'), url('../font/barbarahand-webfont.ttf') format('truetype'), url('../font/barbarahand-webfont.svg#BarbaraHand') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.f-oh {
     overflow: hidden;
     zoom: 1;
     clear: both;
 }
-.f-oh a{
+
+.f-oh a {
     margin-right: 30px;
     color: #565755;
 }
-.f-oh a:hover{
-    text-decoration:underline;
-    color:#6bc30d;
+
+.f-oh a:hover {
+    text-decoration: underline;
+    color: #6bc30d;
 }
-.fs-12{
-    font-size:12px;
+
+.fs-12 {
+    font-size: 12px;
 }
-.fs-14{
-    font-size:14px;
+
+.fs-14 {
+    font-size: 14px;
 }
-.fs-16,h6{
-    font-size:16px;
+
+.fs-16,
+h6 {
+    font-size: 16px;
 }
-.fs-18{
-    font-size:18px;
+
+.fs-18 {
+    font-size: 18px;
 }
-.fs-24{
-    font-size:24px;
+
+.fs-24 {
+    font-size: 24px;
 }
-.fs-32{
-    font-size:32px;
+
+.fs-32 {
+    font-size: 32px;
 }
-.f-fr{
-    float:right;
+
+.f-fr {
+    float: right;
 }
-.fc-blue{
+
+.fc-blue {
     color: #2ea7e0;
 }
-.fc-black{
-    color:#383937
+
+.fc-black {
+    color: #383937
 }
-.fc-grey{
-    color:#787977;
+
+.fc-grey {
+    color: #787977;
 }
-.fc-red{
-    color:#ff4351;
+
+.fc-red {
+    color: #ff4351;
 }
-.f-fwb{
-    font-weight:bold;
+
+.f-fwb {
+    font-weight: bold;
 }
-.f-fwn{
-    font-weight:normal;
+
+.f-fwn {
+    font-weight: normal;
 }
-.f-fl{
-    float:left;
+
+.f-fl {
+    float: left;
 }
-.f-vam{
-    vertical-align:middle;
+
+.f-vam {
+    vertical-align: middle;
 }
-/*.f-ff-icon{
-    font-family:"FontAwesome";
-    font-style:normal;
-    text-rendering:auto;
-}*/
-.f-fr{
-    float:right;
+
+.f-ff-icon {
+    font-family: "FontAwesome";
+    font-style: normal;
+    text-rendering: auto;
 }
-.mt05{
-    margin-top:5px;
+
+.f-fr {
+    float: right;
 }
-.mt10{
-    margin-top:10px;
+
+.mt05 {
+    margin-top: 5px;
 }
-.mt20{
-    margin-top:20px;
+
+.mt10 {
+    margin-top: 10px;
 }
-.ml05{
-    margin-left:5px;
+
+.mt20 {
+    margin-top: 20px;
 }
-.ml10{
-    margin-left:10px;
+
+.ml05 {
+    margin-left: 5px;
 }
-.ml20{
-    margin-left:20px;
+
+.ml10 {
+    margin-left: 10px;
 }
-.mr05{
-    margin-right:5px;
+
+.ml20 {
+    margin-left: 20px;
 }
-.f-noneselect{
+
+.mr05 {
+    margin-right: 5px;
+}
+
+.f-noneselect {
     -webkit-user-select: none;
     user-select: none;
 }
-.fc-link{
+
+.fc-link {
     color: #3e8bc7 !important;
 }
 
-.f-cb,.f-cb:after{
+.f-cb,
+.f-cb:after {
     display: block;
     content: " ";
     height: 0;
     visibility: hidden;
     clear: both;
 }
-.img-light{
-    position:relative;
+
+.img-light {
+    position: relative;
 }
+
 .img-light:after {
     content: "";
     height: 100%;
     width: 100px;
     -webkit-transform: skewX(-25deg) translateZ(0);
     transform: skewX(-25deg) translateZ(0);
-    background-image: linear-gradient(90deg,hsla(0,0%,100%,0),hsla(0,0%,100%,.3) 50%,hsla(0,0%,100%,0));
+    background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, .3) 50%, hsla(0, 0%, 100%, 0));
     position: absolute;
     left: -160%;
     top: 0;
     z-index: 2;
 }
+
 .img-light:hover:after {
     transition: left 1s ease-in-out;
     left: 160%;
 }
-.grid-page{
-    font-size:0;
+
+.grid-page {
+    font-size: 0;
 }
-.grid-page a[href]:hover,.grid-page a.p-current{
+
+.grid-page a[href]:hover,
+.grid-page a.p-current {
     color: #fff;
     background-color: #787977;
     text-decoration: none;
 }
-.grid-page a{
+
+.grid-page a {
     display: inline-block;
     width: 32px;
     height: 32px;
@@ -139,25 +184,29 @@
     transition: all .3s ease-out;
     cursor: default;
     border-radius: 3px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
     color: #787977;
 }
-.grid-page a.p-current{
+
+.grid-page a.p-current {
     background-color: #6bc30d;
     border-radius: 3px;
 }
-.grid-page a[href]{
-    cursor:pointer;
+
+.grid-page a[href] {
+    cursor: pointer;
 }
-.grid-page a.more{
+
+.grid-page a.more {
     background-color: transparent;
     color: #787977;
     cursor: default;
-    text-shadow: 0 1px 0 rgba(255,255,255,.6);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
 }
 
 .checkbox-check {}
-.checkbox-label{
+
+.checkbox-label {
     display: inline-block;
     width: 46px;
     height: 26px;
@@ -170,7 +219,8 @@
     cursor: pointer;
     transition: all .3s ease;
 }
-.checkbox-label:after{
+
+.checkbox-label:after {
     content: '';
     display: inline-block;
     width: 26px;
@@ -183,12 +233,14 @@
     left: 0;
     transition: all .3s ease;
 }
-.checkbox-check:checked~.checkbox-label{
+
+.checkbox-check:checked~.checkbox-label {
     background-color: #6bc30d;
     border-color: #6bc30d;
 }
-.checkbox-check:checked~.checkbox-label:after{
-    transform: translate3d(20px,0,0);
+
+.checkbox-check:checked~.checkbox-label:after {
+    transform: translate3d(20px, 0, 0);
     border-color: #6bc30d;
 }
 
@@ -201,16 +253,19 @@
     vertical-align: middle;
     transition: background-color .3s;
 }
-.u-label.input{
+
+.u-label.input {
     padding: 0 5px 0 30px;
     min-width: 140px;
     background-color: #fff;
 }
-.u-label.button{
+
+.u-label.button {
     border: none;
     padding: 0;
 }
-.u-btn-sub{
+
+.u-btn-sub {
     border: none;
     display: inline-block;
     height: 24px;
@@ -225,4 +280,3 @@
     box-sizing: content-box;
     text-decoration: none!important;
 }
-

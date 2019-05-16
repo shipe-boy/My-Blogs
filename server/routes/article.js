@@ -6,6 +6,7 @@ const Article = require("../module/article");
 const User = require("../module/user")
 const Comment = require("../module/comment")
 const Types = require("../module/types")
+const Example = require("../module/example")
 
 require('../utils/time')
 
@@ -333,6 +334,52 @@ router.post('/search', async(req, res, next) => {
             status: 1,
             msg: err.message
         })
+    })
+})
+
+//每日一题发表
+router.post('/exam', (req, res, next) => {
+    // console.log(req.body)
+    let data = req.body;
+    data.time = new Date().Format('yyyy-MM-dd');
+    // console.log(data);
+
+    new Example(data)
+        .save((err, data) => {
+            if (err) {
+                res.json({
+                    status: 1,
+                    msg: err.message
+                })
+                return
+            }
+            res.json({
+                status: 0,
+                msg: 'success'
+            })
+        })
+})
+
+router.get('/examAll/', async(req, res, next) => {
+    console.log(res.query, req.path)
+        // let page = req.params.id || 1;
+    let page = 1;
+    let examList = await Example
+        .find()
+        .sort("-createTime")
+        .skip((page - 1) * 5) //数据库里从第几条开始找
+        .limit(5) //获取几条数据
+        .then((data) => data, (err) => {
+            res.json({
+                status: 1,
+                msg: err.message
+            })
+            return
+        });
+    await res.json({
+        status: 0,
+        msg: 'success',
+        result: examList
     })
 })
 

@@ -71,9 +71,9 @@
             if (res.data.status == 0) {
               // console.log(res)
               this.articleList = res.data.result.artList;
+              //动画
               this.articleList.forEach((item, i) => {
                 item.i = i;
-                // console.log(item.i)
               })
               this.maxNum = res.data.result.maxNum;
             }
@@ -94,11 +94,10 @@
     mounted() {
       this.getList();
       document.documentElement.scrollTop = 0;
-
+        
       connect.$on("type", type => {
         // console.log(type)
-        //   console.log('/index/articles/articleList' + "/" + type)
-        this.$router.push('/index/articles/List' + "/" + type); //返回首页
+        this.$router.push('/art/'+ type); //返回首页
         this.pageIndex = 1;
         this.getList();
       });

@@ -96,7 +96,7 @@ export default {
 </script>
 <style scoped>
 .doc-container{position:relative;padding-top:60px;-webkit-transition:all .2s;transition:all .2s;min-height:100vh}
-.hasAnim {background: url('../assets/bg.jpg') no-repeat center/cover;position: absolute;width: 100%;height: 260px;overflow: hidden;}
+.hasAnim {background: url('../assets/bg2.jpg') no-repeat center/cover;position: absolute;width: 100%;height: 260px;overflow: hidden;}
 .about-banner{height:260px;background-color:gray;color:#525251}
 .about-banner .about-title{position:relative;z-index:9;padding-top:70px;color:#fff;text-align:center}
 .about-banner .about-title h1{font-size:2.5rem}

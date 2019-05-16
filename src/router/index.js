@@ -6,8 +6,6 @@ import Axios from 'axios'
 Vue.prototype.$ajax = Axios
 
 //组件
-import Start from '../views/start'
-import Index from '../views/index'
 import LinkPage from '../views/link'
 import MsgBoard from '../views/msgboard'
 import Articles from '../components/articles'
@@ -17,6 +15,7 @@ import ArticleList from '../components/articleList'
 import ArticleDetails from '../components/articleDetails'
 import Publish from '../views/publish'
 import Userinfo from '../views/userinfo'
+import ExPublish from '../views/exPublish'
 
 Vue.use(Router)
 
@@ -26,62 +25,53 @@ export default new Router({
         //初始页面
         {
             path: '/',
-            name: 'start',
-            component: Start
-        },
-        {
-            path: '/index',
             name: 'index',
-            component: Index,
-            redirect: '/index/articles',
+            redirect: '/art/all',
+        }, {
+            path: '/art',
+            name: 'articles',
+            component: Articles,
+            redirect: '/art/all',
             children: [{
-                    path: 'articles',
-                    name: 'articles',
-                    component: Articles,
-                    redirect: 'articles/List/all',
-                    children: [{
-                            path: 'List/:type',
-                            name: "articleList",
-                            component: ArticleList
-                        },
-                        {
-                            path: 'Details/:id',
-                            name: "articleDetails",
-                            component: ArticleDetails
-                        }
-                    ]
+                    path: ':type',
+                    name: "articleList",
+                    component: ArticleList
                 },
                 {
-                    path: 'linkpage',
-                    name: 'linkpage',
-                    component: LinkPage
-                },
-                {
-                    path: 'msgboard',
-                    name: 'msgboard',
-                    component: MsgBoard
-                },
-                {
-                    path: 'example',
-                    name: 'example',
-                    component: Example
-                },
-                {
-                    path: 'user',
-                    name: 'user',
-                    component: User
-                },
-                {
-                    path: 'publish',
-                    name: 'publish',
-                    component: Publish
-                },
-                {
-                    path: 'userinfo',
-                    name: 'userinfo',
-                    component: Userinfo
+                    path: 'Details/:id',
+                    name: "articleDetails",
+                    component: ArticleDetails
                 }
             ]
-        }
+        }, {
+            path: '/linkpage',
+            name: 'linkpage',
+            component: LinkPage
+        }, {
+            path: '/msgboard',
+            name: 'msgboard',
+            component: MsgBoard
+        }, {
+            path: '/example',
+            name: 'example',
+            component: Example
+        }, {
+            path: '/user',
+            name: 'user',
+            component: User
+        }, {
+            path: '/publish',
+            name: 'publish',
+            component: Publish
+        }, {
+            path: '/exPublish',
+            name: 'exPublish',
+            component: ExPublish
+        }, {
+            path: '/userinfo',
+            name: 'userinfo',
+            component: Userinfo
+        },
+
     ]
 })

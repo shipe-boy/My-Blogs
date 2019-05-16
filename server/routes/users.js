@@ -312,4 +312,28 @@ router.post("/editorPwd", (req, res, next) => {
             })
         })
 })
+
+//删除
+router.get('/del/:id', async(req, res, next) => {
+    //id
+    const _id = req.params.id;
+    let data = {
+            state: 1,
+            msg: "成功"
+        }
+        // console.log(_id)
+    await User.findById(_id)
+        .then(data => {
+            data.remove()
+        })
+        .catch(err => {
+            data = {
+                state: 0,
+                msg: err
+            }
+
+        })
+
+    res.json(data)
+})
 module.exports = router;
