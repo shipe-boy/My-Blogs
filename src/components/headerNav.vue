@@ -3,6 +3,7 @@
   <header class="gird-header">
     <div class="header-fixed">
       <div class="header-inner">
+        <router-link class="header-logo pc" id="logo" to="/">Bookfish</router-link>
         <nav class="header-nav pc" id="nav">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">
@@ -17,7 +18,9 @@
               <el-menu-item index="React">React</el-menu-item>
               <el-menu-item index="其他">其他</el-menu-item>
             </el-submenu>
-            <el-menu-item index="3"><router-link :to="{name: 'example'}">举个栗子</router-link></el-menu-item>
+            <el-menu-item index="3">
+              <router-link :to="{name: 'example'}">举个栗子</router-link>
+            </el-menu-item>
             <el-menu-item index="4">
               <router-link :to="{name: 'linkpage'}">友情链接</router-link>
             </el-menu-item>
@@ -27,11 +30,16 @@
           </el-menu>
         </nav>
         <!-- 移动端 -->
-        <a class="phone-menu" @click="open">
+        <a v-if="!isBack" class="phone-menu" @click="open">
           <i></i>
           <i></i>
           <i></i>
         </a>
+        <div v-if="isBack" class="back" @click="back">
+          <span class="arrow">
+            <span class="arrow green"></span>
+          </span>
+        </div>
         <nav class="header-nav phone" id="nav">
           <transition name="menu">
             <el-menu v-if="isOpen" default-active="2" class="el-menu-vertical-demo" @select="handleSelect"
@@ -55,7 +63,9 @@
                 </el-menu-item-group>
               </el-submenu>
               <el-menu-item index="3">
-                <span slot="title"><router-link :to="{name: 'example'}">举个栗子</router-link></span>
+                <span slot="title">
+                  <router-link :to="{name: 'example'}">举个栗子</router-link>
+                </span>
               </el-menu-item>
               <el-menu-item index="4">
                 <span slot="title">
@@ -73,7 +83,7 @@
                 </span>
               </el-menu-item>
             </el-menu>
-            
+
           </transition>
           <div v-if="isOpen" class="cover" @click="close"></div>
         </nav>
@@ -135,24 +145,32 @@
     },
     computed: {
       username() {
-          this.getUserInfo()
+        this.getUserInfo()
         return this.$store.state.username;
       },
       userface() {
         return this.$store.state.userface;
       },
-      activeIndex(){
+      activeIndex() {
         let path = this.$route.path;
-        if(path == '/example'){
-            return '3';
-        }else if(path == '/art/all'){
-            return '1';
-        }else if(path == '/linkpage'){
-            return '4';
-        }else if(path == '/example'){
-            return '5';
-        }else {
-            return '2';
+        if (path == '/example') {
+          return '3';
+        } else if (path == '/art/all') {
+          return '1';
+        } else if (path == '/linkpage') {
+          return '4';
+        } else if (path == '/example') {
+          return '5';
+        } else {
+          return '2';
+        }
+      },
+      isBack() {
+        let path = this.$route.path;
+        if (/\/art\/Details\//.test(path)) {
+          return true
+        } else {
+          return false;
         }
       }
     },
@@ -206,11 +224,14 @@
               this.$store.commit('userName', "")
               this.$store.commit('userFace', "")
             }
-              this.$router.push('/') //返回首页
+            this.$router.push('/') //返回首页
           }).catch(err => {
             console.log(err)
           })
         }
+      },
+      back() {
+        this.$router.go(-1)
       }
     }
   }
@@ -311,6 +332,25 @@
     top: 32px
   }
 
+  .back {
+    float: left;
+    position: relative;
+    left: -20px;
+    top: 13px;
+  }
+
+  .back span {
+    position: absolute;
+    border: 18px solid transparent;
+    border-right-color: #999;
+  }
+
+  .back span.green {
+    border-right-color: #fff;
+    left: -14px;
+    top: -18px;
+  }
+
   @media screen and (min-width:1025px) {
     .blog-user {
       right: 0
@@ -320,8 +360,12 @@
       display: none
     }
 
+    .pc {
+      display: block;
+    }
+
     .header-nav {
-      display: block !important
+      display: block !important;
     }
 
     .header-nav.phone {
@@ -347,6 +391,10 @@
       display: none
     }
 
+    .pc {
+      display: block;
+    }
+
     .header-nav {
       display: block
     }
@@ -366,7 +414,7 @@
     .header-logo {
       left: 25%;
       width: 50%;
-      font-size:24px;
+      font-size: 24px;
     }
 
     .header-nav {
@@ -385,7 +433,9 @@
     .phone-menu {
       display: block;
     }
-    
+    .pc{
+        display: none;
+    }
     .header-nav.phone {
       display: block;
       visibility: hidden;
@@ -423,7 +473,7 @@
       width: 50%;
       height: 100%;
     }
-    
+
   }
 
 

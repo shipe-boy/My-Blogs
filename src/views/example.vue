@@ -76,16 +76,16 @@
               item.isOpen = false;
             })
           }
-          // console.log(this.exampleList)
+        //   console.log(this.exampleList)
         }).catch(err => {
           console.log(err)
         })
       },
       open(item) {
         // console.log(item,item.isOpen)
-        item.isOpen = !item.isOpen;
+       item.isOpen = !item.isOpen;
         this.haha = !this.haha;
-        console.log(item.isOpen)
+        // console.log(item.isOpen)
       },
       loadMore() {
         this.busy = true;
